@@ -4,24 +4,28 @@ import openpyxl
 import os.path
 import data
 import os
-import smtplib
-from colorama import Fore, Back, Style
-import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
+from colorama import Fore, Back, Style
+import smtplib
 
+#from buratino_mode import pars_buratino
+import webbrowser
+
+
+#pyinstaller --onefile --console --icon=1.ico pars.py
 base = data.base
 balance = data.balance
 reset_the_balance = data.reset_the_balance
 dataForTransportation = data.dataForTransportation
 
-print('[x] ВВЕДИ НАЗВАНИЕ ТОЧКИ (пж это 5 сек, но мне оч важно)')
-userpk = str(input())
-print(f'Спасибо {userpk}\n')
+#print('[x] ВВЕДИ НАЗВАНИЕ ТОЧКИ')
+#userpk = str(input())
+#print(f'Спасибо {userpk}\n')
 
 def version() :
-    ver = 'V0.16 18.01.2024'
+    ver = 'V0.2.1 07.11.2024'
     return(ver)
 
 def mistakes(twoofile) : # Создаем лог ошибки
@@ -46,7 +50,7 @@ def mistakes(twoofile) : # Создаем лог ошибки
     print('[x] Идет отправка на почту оиждай \n')
     text = str(listtoandrew)
     # send_mails(text + '\nHWID: ' + defender())
-    new_send_mail(text + '\n' + version() + ' Пользователь: ' + defender() + '\n' + 'User name: ' + userpk, twoofile)
+    new_send_mail(text + '\n' + version() + ' Пользователь: ' + defender() + '\n' + 'User name: ', twoofile)
     print('[x] Отправка завершена \n')
 
 def defender() : # Защита по HWID
@@ -71,7 +75,13 @@ def defender() : # Защита по HWID
             HWIDSTR = 'Букетова'
             break
         if item == 'J32655J003368':
+            HWIDSTR = 'Рынок'
+            break
+        if item == 'S4Y0S4P7':
             HWIDSTR = 'Океан'
+            break
+        if item == 'X7IYT1BHT':
+            HWIDSTR = 'Караван'
             break
     return(HWIDSTR)
 
@@ -82,12 +92,16 @@ def choosingAnAction() : # Меню
 
 
 Выбери операцию: 
-    [x] Присвоить тег
-    [x] Найти суммы
-    [3] Автоматический режим - (считает сразу 2 таблицы)
-    [4] Solo mode
+    [x] Присвоить тег (СТАРОЕ)
+    [x] Найти суммы (СТАРОЕ)
+
+    [3] Две таблицы
+    [4] Одна таблица
+    [5] Таблица для буратино
+
+    [6] Перейти на сайт для загрузки новой версии 
     ''')
-    key = input('ПРОСТО ВВЕДИ ЧИСЛО ОТ 1 ДО 4: ')
+    key = input('ПРОСТО ВВЕДИ ЧИСЛО: ')
     if key == "1":
         comparison(input('Введи название файла: ') + '.xlsx')
         print("\n\n\nЭта хуйня завершила свою работу возможно (проверок нет)")
@@ -104,6 +118,16 @@ def choosingAnAction() : # Меню
         solo_mode()
         print("\n\n\nЭта хуйня завершила свою работу возможно (проверок нет)")
         choosingAnAction()
+    elif key == "5":
+        #pars_buratino()
+        choosingAnAction()
+    elif key == "6":
+        
+        url = 'https://github.com/Stobxd/Pars-1C/releases'
+        webbrowser.open(url)    
+            
+        choosingAnAction()
+
     else :
         choosingAnAction()
 
@@ -123,18 +147,28 @@ def comparison(fileName) : # Присвоить тег
         sheete['C1'] = "Теги"
 
 
-
+    row_count = sheete.max_row + 1
     # основной цикл 
-    for row in range(1, 900) :
+    for row in range(1, row_count) :
         number = sheete[row][0].value    
         if number:
             Number2 = garbage_cleaning(number)
-            # print(Number2)
             for f in base.keys():
+                # основной цикл 
                 if Number2 == garbage_cleaning(f):
-                    # print(Number2 + " | Присваиваем значение: " + base[f])
                     sheete[row][2].value = base[f]
                     number_of_matches = number_of_matches + 1
+                    break
+                #универсальные фильтры Рамка
+                three = sheete[row][0].value
+                if three[:3] == 'Э/п':
+                    sheete[row][2].value = 'Товар (продажа)'
+                if three[:6] == 'Флешка':
+                    sheete[row][2].value = 'Товар (продажа)'
+                if three[:7] == 'Ламинат':
+                    sheete[row][2].value = 'Ламинат'
+                if three[:5] == 'Рамка':
+                    sheete[row][2].value = 'Товар (продажа)'
 
     print('\n\n\n[x] Найдено совпадений: '+ str(number_of_matches) + '\n') 
 
@@ -158,7 +192,8 @@ def theAmount(fileName) : # Считаем сумму
         print('Создаем стобец')
 
     reset_the_balance()
-    for row in range(1, 900) :
+    row_count = sheete.max_row + 1
+    for row in range(1, row_count) :
         number = sheete[row][2].value
         if number:
             numberr = garbage_cleaning(number)
@@ -168,14 +203,10 @@ def theAmount(fileName) : # Считаем сумму
                     balance[i] = balance[i] + int(sheete[row][1].value)
 
     # Считаем количество заполненых строк и записыавем в numberoflines
-    numberoflines = 1 
-    for row in range(1, 900):
-        number = sheete[row][0].value
-        if number:
-            numberoflines = numberoflines + 1
+
 
     # Делаем проверку на значения которые не были учтены в цикле 
-    for row in range(1, numberoflines):
+    for row in range(1, row_count):
         cellkey = sheete[row][2].value
         if cellkey:
             cellkey = garbage_cleaning(cellkey)
@@ -183,6 +214,7 @@ def theAmount(fileName) : # Считаем сумму
                 ii = garbage_cleaning(i)
                 if cellkey == ii:
                     sheete[row][3].value = 'Программа посчитала эту хуйню'
+    
 
     # Запись в файл 
     file = open('Лог.txt', 'a', encoding='utf-8')
@@ -200,7 +232,7 @@ def theAmount(fileName) : # Считаем сумму
     #Считаем обущую сумму екселя
     print("Считаем общую сумму екселя")
     summxlsx = 0
-    for i in range(2, numberoflines):
+    for i in range(2, row_count):
         print(sheete[i][1].value)
         summxlsx = summxlsx + sheete[i][1].value
     print(summxlsx)
@@ -319,11 +351,11 @@ def line_count(name): #считаем количество строк
     page = book.active
 
 
- 
-    count = 0
-    for item in page:
-        count += 1
-    return count
+    row_count = page.max_row + 1
+    #count = 0
+    #for item in page:
+    #    count += 1
+    return row_count
 
 def solo_mode() : # Solo mode 
     fileName = input("Введи название файла: ")
@@ -340,7 +372,9 @@ def solo_mode() : # Solo mode
 
     choosingAnAction()
 
-choosingAnAction()
 
-os.system("PAUSE")
+
+#choosingAnAction()
+
+#os.system("PAUSE")
             
