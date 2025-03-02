@@ -21,14 +21,21 @@ def select_file():
     if file_path:  # Если файл был выбран
         a.delete(0, tk.END)  # Очищаем текстовое поле
         a.insert(0, file_path)  # Вставляем путь в текстовое поле
+
+def select_filejpg():
+    file_path = filedialog.askopenfilename()  # Открываем диалоговое окно для выбора файла
+    if file_path:  # Если файл был выбран
+        imginp.delete(0, tk.END)  # Очищаем текстовое поле
+        imginp.insert(0, file_path)  # Вставляем путь в текстовое поле
     
-def printtt():
+def Buratino():
     ggg = a.get()
     dateTable = s.get()
     nameinput = name.get()
-    pars_buratino(ggg, dateTable,  nameinput)
+    jjpgname = imginp.get()
+    pars_buratino(ggg, dateTable,  nameinput, jjpgname)
 
-def printtt2():
+def standart():
     ggg = a.get()
     dateTable = s.get()
     solo_mode(ggg, dateTable)
@@ -48,20 +55,23 @@ root.geometry("400x400")
 main_screen = tk.Frame(root)
 tk.Label(main_screen, text="Главный экран", font=("Arial", 16)).pack(pady=10)
 
-# Создаем текстовое поле отдельно и вызываем метод pack на отдельной строке
-a = tk.Entry(main_screen, width=50)
-a.pack(pady=5)  # Добавляем текстовое поле на экран
-a.insert(0, "Выбери название файла")  # Добавляем начальный текст
+
 
 
 s = tk.Entry(main_screen, width=50)
 s.pack(pady=5)
-s.insert(0, "Дату укажи") 
+s.insert(0, "Дату укажи (работает только в буратино)") 
 
 name = tk.Entry(main_screen, width=50)
 name.pack(pady=5)
-name.insert(0, "Укажи имя") 
+name.insert(0, "Укажи имя (работает только в буратино)") 
 
+
+
+# Создаем текстовое поле отдельно и вызываем метод pack на отдельной строке
+a = tk.Entry(main_screen, width=50)
+a.pack(pady=5)  # Добавляем текстовое поле на экран
+a.insert(0, "Выбери название файла")  # Добавляем начальный текст
 
 # Кнопка для выбора файла
 b = tk.Button(main_screen, text="Выбрать файл", command=select_file, width=30)
@@ -69,11 +79,25 @@ b.pack(pady=5)
 
 
 
-tk.Button(main_screen, text="БУРАТИНО", command=lambda: printtt(), width=30).pack(pady=10)
-tk.Button(main_screen, text="СТАНДАРТ", command=lambda: printtt2(), width=30).pack(pady=10)
-tk.Button(main_screen, text="ТГ канал", command=lambda: printtt3(), width=30).pack(pady=10)
 
 
+
+
+
+# Создаем текстовое поле отдельно и вызываем метод pack на отдельной строке
+imginp = tk.Entry(main_screen, width=50) 
+imginp.pack(pady=5)  # Добавляем текстовое поле на экран
+imginp.insert(0, "Название фотки ")  # Добавляем начальный текст
+
+# Кнопка для выбора файла
+imgbutt = tk.Button(main_screen, text="Выбрать файл jpg", command=select_filejpg, width=30)
+imgbutt.pack(pady=5)
+
+
+
+
+tk.Button(main_screen, text="БУРАТИНО", command=lambda: Buratino(), width=30).pack(pady=10)
+tk.Button(main_screen, text="СТАНДАРТ", command=lambda: standart(), width=30).pack(pady=10)
 
 
 

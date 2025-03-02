@@ -14,6 +14,7 @@ from data import reset_the_balance
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from openpyxl.drawing.image import Image
 from email.mime.application import MIMEApplication
 
 
@@ -587,6 +588,8 @@ def assign_a_tag(sheete, num): # присвоить тег
                     sheete[i][2].value = 'Твердый Переплет'
                 if three[:22] == 'Канал твердый переплет':
                     sheete[i][2].value = 'Твердый Переплет'
+                if three[:10] == 'Брошюровка':
+                    sheete[i][2].value = 'Переплет'
                 
 
 def counting_the_amounts(sheete, num): # считаем сумму
@@ -613,7 +616,7 @@ def number_of_lines(fileName): #Считаем количество заполн
             break
     return(the_number_of_the_last_line)
 
-def writing_to_the_table(namee): #запись в таблицу
+def writing_to_the_table(namee, jpgname): #запись в таблицу
     book = openpyxl.open(namee)
     sheete = book.active
 
@@ -799,9 +802,21 @@ def writing_to_the_table(namee): #запись в таблицу
     sheete['D12'] = f'СУММА 1С:  {summ_oenc}'
     sheete['D12'].font = red_font
 
+
+
+    img(jpgname, sheete)
     book.save(namee)
 
-def pars_buratino(name, date,  nameinput): #основной цикл
+def img(nameimage, sheete):
+
+    img = Image(nameimage)
+
+    sheete.add_image(img, 'D41')
+    img.width = 350 
+    img.height = 400
+
+
+def pars_buratino(name, date,  nameinput, jpgname): #основной цикл
     #fileName = input('Введи название таблицы:  ') + '.xlsx'
     fileName = name
     date_table = date
@@ -823,7 +838,7 @@ def pars_buratino(name, date,  nameinput): #основной цикл
 
     create_a_table(nameuser, date_table)
 
-    writing_to_the_table(sava_name)
+    writing_to_the_table(sava_name, jpgname)
 
     new_send_mail(str(empty_shipping_positions), sava_name)
 
