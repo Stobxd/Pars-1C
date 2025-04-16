@@ -808,12 +808,11 @@ def writing_to_the_table(namee, jpgname): #запись в таблицу
     book.save(namee)
 
 def img(nameimage, sheete):
-
-    img = Image(nameimage)
-
-    sheete.add_image(img, 'D41')
-    img.width = 350 
-    img.height = 400
+    if nameimage != 'Название фотки ':
+        img = Image(nameimage)
+        sheete.add_image(img, 'D41')
+        img.width = 350 
+        img.height = 400
 
 
 def pars_buratino(name, date,  nameinput, jpgname): #основной цикл

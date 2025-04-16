@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from tkinter import filedialog
 from tkinter import *
 from data import vetsion
@@ -53,28 +54,28 @@ root.geometry("400x400")
 
 # Главный экран
 main_screen = tk.Frame(root)
-tk.Label(main_screen, text="Главный экран", font=("Arial", 16)).pack(pady=10)
+ttk.Label(main_screen, text="Главный экран", font=("Arial", 16)).pack(pady=10)
 
 
 
 
-s = tk.Entry(main_screen, width=50)
+s = ttk.Entry(main_screen, width=50)
 s.pack(pady=5)
 s.insert(0, "Дату укажи (работает только в буратино)") 
 
-name = tk.Entry(main_screen, width=50)
+name = ttk.Entry(main_screen, width=50)
 name.pack(pady=5)
 name.insert(0, "Укажи имя (работает только в буратино)") 
 
 
 
 # Создаем текстовое поле отдельно и вызываем метод pack на отдельной строке
-a = tk.Entry(main_screen, width=50)
+a = ttk.Entry(main_screen, width=50)
 a.pack(pady=5)  # Добавляем текстовое поле на экран
 a.insert(0, "Выбери название файла")  # Добавляем начальный текст
 
 # Кнопка для выбора файла
-b = tk.Button(main_screen, text="Выбрать файл", command=select_file, width=30)
+b = ttk.Button(main_screen, text="Выбрать файл", command=select_file, width=30)
 b.pack(pady=5)
 
 
@@ -85,19 +86,19 @@ b.pack(pady=5)
 
 
 # Создаем текстовое поле отдельно и вызываем метод pack на отдельной строке
-imginp = tk.Entry(main_screen, width=50) 
+imginp = ttk.Entry(main_screen, width=50) 
 imginp.pack(pady=5)  # Добавляем текстовое поле на экран
 imginp.insert(0, "Название фотки ")  # Добавляем начальный текст
 
 # Кнопка для выбора файла
-imgbutt = tk.Button(main_screen, text="Выбрать файл jpg", command=select_filejpg, width=30)
+imgbutt = ttk.Button(main_screen, text="Выбрать файл jpg", command=select_filejpg, width=30)
 imgbutt.pack(pady=5)
 
 
 
 
-tk.Button(main_screen, text="БУРАТИНО", command=lambda: Buratino(), width=30).pack(pady=10)
-tk.Button(main_screen, text="СТАНДАРТ", command=lambda: standart(), width=30).pack(pady=10)
+ttk.Button(main_screen, text="БУРАТИНО", command=lambda: Buratino(), width=30).pack(pady=10)
+ttk.Button(main_screen, text="СТАНДАРТ", command=lambda: standart(), width=30).pack(pady=10)
 
 
 
