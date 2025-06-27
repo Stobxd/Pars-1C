@@ -122,7 +122,7 @@ def mistakes(twoofile) : # Создаем лог ошибки
     print('[x] Идет отправка на почту оиждай \n')
     text = str(listtoandrew)
     # send_mails(text + '\nHWID: ' + defender())
-    new_send_mail(text + '\n' + version() + ' Пользователь: ' + defender() + '\n' + 'User name: ', twoofile)
+    new_send_mail(text + '\n' + version() + 'Стандартный режим  Пользователь: ' + defender() + '\n' + 'User name: ', twoofile)
     print('[x] Отправка завершена \n')
 
 

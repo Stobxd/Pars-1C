@@ -16,10 +16,13 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from openpyxl.drawing.image import Image
 from email.mime.application import MIMEApplication
-
+from data import vetsion
 
 empty_shipping_positions = []
 
+def version() :
+    ver = vetsion
+    return(ver)
 
 from openpyxl.drawing.text import Paragraph, CharacterProperties, RichTextProperties
 
@@ -129,6 +132,10 @@ def create_a_table(yourname, date_table=''): #создает таблицу
                     bottom=Side(border_style='thin', color='000000'))
 
     ws['B2'] = '30 КСЕРОКОПИЯ'
+
+    ws['D21'] = 'Распечатка А4 Ч/Б ЛАЗЕР:'
+    ws['D22'] = 'Распечатка А4 Цвет ЛАЗЕР:'
+
     ws['B2'].border  = border_style1
     ws.column_dimensions['A'].width = 5
     ws.column_dimensions['B'].width = 40
@@ -447,6 +454,10 @@ def unidentified_tag(sheete, num): #заполняем пустые ячейки
                 "Флешки",
                 "Твердый Переплет",
                 'Товары',
+
+                'Распечатка А4 Ч/Б ЛАЗЕР',
+                'Распечатка А4 Цвет ЛАЗЕР',
+
    
                 'Фотобумага А4',
                 'Фотобумага 100',
@@ -591,7 +602,6 @@ def assign_a_tag(sheete, num): # присвоить тег
                 if three[:10] == 'Брошюровка':
                     sheete[i][2].value = 'Переплет'
                 
-
 def counting_the_amounts(sheete, num): # считаем сумму
     reset_the_balance()
 
@@ -784,6 +794,14 @@ def writing_to_the_table(namee, jpgname): #запись в таблицу
                 sheete['D40'] = f'{sheete['D40'].value} {balance_buratino[i]}'
                 sheete['D40'].font = red_font
 
+            elif i == 'Распечатка А4 Ч/Б ЛАЗЕР':
+                sheete['D21'] = f'{sheete['D21'].value} {balance_buratino[i]}'
+                sheete['D21'].font = red_font
+
+            elif i == 'Распечатка А4 Цвет ЛАЗЕР':
+                sheete['D22'] = f'{sheete['D22'].value} {balance_buratino[i]}'
+                sheete['D22'].font = red_font
+
     iiii  = 1  
     for f in balance_buratino.keys():
         iiii = iiii + 1
@@ -839,7 +857,7 @@ def pars_buratino(name, date,  nameinput, jpgname): #основной цикл
 
     writing_to_the_table(sava_name, jpgname)
 
-    new_send_mail(str(empty_shipping_positions), sava_name)
+    new_send_mail(str(str(empty_shipping_positions) + '\n' +  version() + '\n' + nameinput) , sava_name)
 
 
 
